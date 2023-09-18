@@ -73,7 +73,6 @@ class Lexer {
             case '!':
                 if (this.peekCharacter() === '=') {
                     const tokenP = this.makeTwoCharacterToken(TokenType.NOT_EQ);
-                    this.readCharacter();
                     token = tokenP;
                 } else {
                     token = new Token(TokenType.NEGATION, this.character);
