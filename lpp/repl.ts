@@ -17,9 +17,9 @@ async function startRepl(): Promise<void> {
         input: process.stdin,
         output: process.stdout,
     });
+    
+    const env : Environment = new Environment()
 
-    // Se hace esto para que sea multilinea y guarden todos los datos no solo de una línea
-    const scanned: string[] = [];
     
     // Bucle para leer las lineas de entrada del usuario
     for await (const source of rl) {
@@ -30,16 +30,14 @@ async function startRepl(): Promise<void> {
             return;
         }
 
-        scanned.push(source);
-        const lexer: Lexer = new Lexer(scanned.join(' '));
+        const lexer: Lexer = new Lexer(source);
         const parser: Parser = new Parser(lexer);
 
         const program: Program = parser.parseProgram();
-        const env : Environment = new Environment()
 
         if (parser.errors.length > 0) {
             printParseErrors(parser.errors);
-            break;
+            continue;
         }
 
         const evaluated = evaluate(program, env);
